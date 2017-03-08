@@ -7,7 +7,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
 const styles = {
-    container: {},
+    container: {
+
+    },
+    logoContainer: {
+        textAlign: 'center'
+    }
 };
 
 class InviteUsers extends Component {
@@ -91,6 +96,9 @@ class InviteUsers extends Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
+                    <div style={styles.logoContainer}>
+                    <img src="images/logo.png" className="logo-sm" />
+                    </div>
                     <h1>Invite Users to Beer Swap</h1>
                     <InviteList users={this.getAvailableUsers()}
                                 handleSelectedUserChange={this.handleSelectedUserChange}/>

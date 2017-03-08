@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
 const styles = {
     container: {
         textAlign: 'center',
-        paddingTop: 200,
+        paddingTop: 20,
     },
 };
 
@@ -18,6 +19,7 @@ class CreateSwap extends Component {
 
         this.createSwap = this.createSwap.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
 
         this.state = {
             swapDate: null
@@ -62,13 +64,34 @@ class CreateSwap extends Component {
 
     }
 
+    handleTimeChange = (e, theDate) => {
+        let dateState = this.state.swapDate;
+        let newDate = dateState ? new Date(dateState.valueOf()) : new Date();
+        newDate.setHours(theDate.getHours(), theDate.getMinutes());
+        this.setState({swapDate: newDate});
+    }
+
+    getDefaultTime = () => {
+        let now = new Date();
+        now.setHours(12, 0, 0, 0);
+        return now;
+    }
+
+
     render() {
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
+                    <img src="images/logo.png" className="logo" />
                     <h1>Create a New Beer Swap</h1>
                     <DateSelector handleDateChange={this.handleDateChange}/>
+                    <TimePicker
+                        hintText="Select a time"
+                        autoOk={true}
+                        defaultTime={this.getDefaultTime()}
+                        onChange={this.handleTimeChange}
+                    />
                     <SubmitButton createSwap={this.createSwap} hasDate={this.hasDate}/>
                 </div>
             </MuiThemeProvider>

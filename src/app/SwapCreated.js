@@ -6,7 +6,7 @@ import {muiTheme} from './ColorScheme';
 const styles = {
     container: {
         textAlign: 'center',
-        paddingTop: 100,
+        paddingTop: 20,
     },
     paper: {
         height: 200,
@@ -27,6 +27,8 @@ class SwapCreated extends Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
+                    <img src="images/logo.png" className="logo-sm" />
+                    <br/>
                     <Paper style={styles.paper} zDepth={2}>
                         <h1>Swap was created</h1>
                         <h2>and emails have been sent.</h2>

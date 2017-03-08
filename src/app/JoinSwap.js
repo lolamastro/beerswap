@@ -76,13 +76,14 @@ class JoinSwap extends Component {
 
         this.hasBeer = this.hasBeer.bind(this);
         this.onSelectBeer = this.onSelectBeer.bind(this);
-        this.onDontKnowBeer = this.onDontKnowBeer.bind(this);
+        this.onHandleChooseBeer = this.onHandleChooseBeer.bind(this);
         this.handleBeerInput = this.handleBeerInput.bind(this);
 
         this.state = {
             userId: userId,
             swapId: swapId,
-            suggestions: ['Pabst', 'Sam Adams', 'Corona']
+            suggestions: [],
+            beerId: null
         };
     }
 
@@ -106,33 +107,57 @@ class JoinSwap extends Component {
     }
 
     handleBeerInput(txtValue, datasource) {
-        if (txtValue.length == 3) {
-            // let url = 'http://api.brewerydb.com/v2/search?type=beer&format=json&key=172feb1658d38aa1a686ccb4848bf82b&q=' + txtValue;
-            // let me = this;
-            // fetch(url, {
-            //     // mode: 'no-cors',
-            //     method: 'get'
-            // }).then(function (response) {
-            //         return response.json();
-            //
-            // }).then(setBeers);
-            //
-            // function setBeers(beers) {
-            //     debugger;
-            //     me.setState({
-            //         suggestions: beers
-            //     });
-            // }
+        if (txtValue.length >= 3) {
+            let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/' + txtValue;
+            let me = this;
+            fetch(url, {
+                mode: 'cors',
+                method: 'get'
+            }).then(function (response) {
+                    return response.json();
+            }).then(setBeers);
+
+            function setBeers(beers) {
+                me.setState({
+                    suggestions: beers
+                });
+            }
+        } else {
+            this.setState({
+                suggestions: []
+            });
         }
     }
 
-    onSelectBeer() {
-        debugger;
+    onSelectBeer(beerObj) {
+        let beerId = beerObj.id;
+        this.setState({
+            beerId: beerId
+        });
     }
 
-    onDontKnowBeer() {
-        debugger;
+
+    onHandleChooseBeer() {
+        let me = this;
+        let userId = this.state.userId,
+            swapId = this.state.swapId,
+            beerId = this.state.beerId;
+
+        let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/User/Beer/V1/${swapId}/${userId}/${beerId}`;
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'put'
+        }).then(function (response) {
+            return response.json();
+        }).then(function (j) {
+            //TODO: change this url
+            me.props.router.push('/swapcreated');
+        });
     }
+
 
     render() {
 
@@ -141,8 +166,8 @@ class JoinSwap extends Component {
                 <div style={styles.container}>
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
-                    <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} />
-                    <ChooseBeerSubmitButton onSelectBeer={this.onSelectBeer} hasBeer={this.hasBeer}/>
+                    <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} onSelectBeer={this.onSelectBeer}/>
+                    <ChooseBeerSubmitButton onHandleChooseBeer={this.onHandleChooseBeer} hasBeer={this.hasBeer}/>
                     <br/>
                     <p style={styles.instruction}>If you don't know yet, just return to this page and tell us later.</p>
                     <BeerGridList />
@@ -153,9 +178,24 @@ class JoinSwap extends Component {
 }
 
 class BeerAutoComplete extends React.Component {
+
+    filterBeers = (searchText, key) => {
+        let match = searchText !== '' && key.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+        return match;
+    }
+
     render() {
+        const dataSourceConfig = {
+            text: 'name',
+            value: 'id',
+        };
+
         return (
-            <AutoComplete id="beerToBring" dataSource={this.props.suggestions} onUpdateInput={this.props.handleUpdateInput} filter={(searchText: '', key: '') => true} />
+            <AutoComplete id="beerToBring" dataSource={this.props.suggestions} onUpdateInput={this.props.handleUpdateInput}
+                          filter={this.filterBeers}
+                          onNewRequest={this.props.onSelectBeer}
+                          dataSourceConfig={dataSourceConfig}
+                          hintText="Enter a beer name"/>
         );
     }
 }
@@ -166,7 +206,7 @@ class ChooseBeerSubmitButton extends React.Component {
             <RaisedButton label="OK"
                           primary={true}
                           style={styles.chooseBeerButton}
-                          onTouchTap={this.props.onSelectBeer}/>
+                          onTouchTap={this.props.onHandleChooseBeer}/>
         );
     }
 }
@@ -182,18 +222,6 @@ class BeerGridList extends Component {
 
     handleExpandChange = (expanded) => {
         this.setState({expanded: expanded});
-    };
-
-    handleToggle = (event, toggle) => {
-        this.setState({expanded: toggle});
-    };
-
-    handleExpand = () => {
-        this.setState({expanded: true});
-    };
-
-    handleReduce = () => {
-        this.setState({expanded: false});
     };
 
     render() {
