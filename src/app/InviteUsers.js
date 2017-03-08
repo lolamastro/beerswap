@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { browserHistory } from 'react-router';
 
 const styles = {
   container: {
@@ -30,22 +29,22 @@ class InviteUsers extends Component {
 
     this.state = {
       selectedUsers: [],
-        availableUsers: [
-            {name: 'John', id: 1},
-            {name: 'Lola', id: 2},
-            {name: 'Matt', id: 3}
-        ]
+        availableUsers: []
     };
   }
 
 
     componentDidMount() {
-        //TODO: get the users here
-        fetch('http://dev03.contentsexpress.lan/Claimsws/api/Lookup/LookupTypes/V1').then(function(response) {
+        let me = this;
+        fetch('http://beerswap.enservio.lan/BeerWS/api/User/V1').then(function(response) {
             return response.json();
-        }).then(function(j) {
-            console.log(j);
-        });
+        }).then(setUsers);
+
+        function setUsers(users) {
+            me.setState({
+                availableUsers: users
+            });
+        }
     }
 
     getAvailableUsers = () => {
@@ -97,15 +96,15 @@ class InviteUsers extends Component {
 class InviteList extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this.users = props.users;
+        this.props = props;
     }
 
     render() {
-        const users = this.users.map((user) => {
+        const users = this.props.users.map((user) => {
             return (
-                <ListItem key={user.id}
-                    leftCheckbox={<Checkbox id={user.id} onCheck={this.props.handleSelectedUserChange} />}
-                    primaryText={user.name}
+                <ListItem key={user.UserId}
+                    leftCheckbox={<Checkbox id={user.UserId} onCheck={this.props.handleSelectedUserChange} />}
+                    primaryText={user.FirstName + ' ' + user.LastName}
                 />
             );
         });
