@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Extjs" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="ExtJS 4.2" />
+      <option name="frameworkVersion" value="5.0" />
+    </properties>
+    <CLASSES>
+      <root url="file:///var/www/src/platformsc/webresources/ui/lib/extjs/4.2.2" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

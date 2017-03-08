@@ -1,7 +1,7 @@
 {
-  "name": "material-ui-example-webpack",
-  "version": "0.16.4",
-  "description": "Sample project that uses Material-UI",
+  "name": "beer-swap-app",
+  "version": "0.1.0",
+  "description": "Beer swap app",
   "repository": {
     "type": "git",
     "url": "https://github.com/callemall/material-ui.git"
@@ -23,9 +23,11 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "graceful-fs": "^4.1.11",
     "material-ui": "^0.16.4",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-router": "^3.0.2",
     "react-tap-event-plugin": "^2.0.1"
   }
 }
