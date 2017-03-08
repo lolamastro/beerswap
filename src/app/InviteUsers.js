@@ -14,6 +14,8 @@ class InviteUsers extends Component {
     constructor(props, context) {
         super(props, context);
 
+        let swapId = this.props.params['swapId'];
+
         this.hasSelectedUsers = this.hasSelectedUsers.bind(this);
         this.handleInviteUsers = this.handleInviteUsers.bind(this);
         this.handleSelectedUserChange = this.handleSelectedUserChange.bind(this);
@@ -21,7 +23,8 @@ class InviteUsers extends Component {
 
         this.state = {
             selectedUsers: [],
-            availableUsers: []
+            availableUsers: [],
+            swapId: swapId
         };
     }
 
@@ -47,12 +50,24 @@ class InviteUsers extends Component {
     }
 
     handleInviteUsers = () => {
+        let me = this;
         let selectedUsers = this.state.selectedUsers;
-        // validate the date
         if (selectedUsers.length === 0) {
             alert('No selected users');
         }
-        this.props.router.push('/swapcreated');
+
+        let swapId = this.state.swapId;
+        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Invite/V1/' + swapId;
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'post',
+            body: JSON.stringify(selectedUsers)
+        }).then(function () {
+            me.props.router.push('/swapcreated');
+        });
     }
 
     handleSelectedUserChange = (e, checked) => {
