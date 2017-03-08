@@ -36,23 +36,30 @@ class CreateSwap extends Component {
 
     createSwap = () => {
         let swapDate = this.state.swapDate,
-            swapDateStr = swapDate.toDateString();
+            swapDateStr = swapDate.toDateString(),
+            me = this;
 
         // validate the date
         if (!swapDate) {
           alert('No swap Date!');
         }
 
-        //TODO: create the swap
-        // fetch('api/Beer/Swap/V1', {
-        //     method: 'post',
-        //     body: JSON.stringify({
-        //         SwapDate: swapDate,
-        //         Name: swapDateStr
-        //     })
-        // });
-
-        this.props.router.push('/invite');
+        fetch('http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/V1', {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'post',
+            body: JSON.stringify({
+                SwapDate: swapDate,
+                Name: swapDateStr
+            })
+        }).then(function(response) {
+            return response.json();
+        }).then(function(j) {
+            let swapId = j.SwapId;
+            me.props.router.push('/invite/' + swapId);
+        });
     }
 
     handleDateChange = (e, theDate) => {
