@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {deepOrange500} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {muiTheme} from './ColorScheme';
 
 const styles = {
     container: {
@@ -18,12 +17,6 @@ const styles = {
         display: 'inline-block'
     }
 };
-
-const muiTheme = getMuiTheme({
-    palette: {
-        accent1Color: deepOrange500,
-    },
-});
 
 class SwapCreated extends Component {
     constructor(props, context) {

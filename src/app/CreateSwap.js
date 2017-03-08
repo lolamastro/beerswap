@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
-import {deepOrange500} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {muiTheme} from './ColorScheme';
 
 const styles = {
   container: {
@@ -12,11 +11,6 @@ const styles = {
   },
 };
 
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
-});
 
 class CreateSwap extends Component {
   constructor(props, context) {
@@ -94,7 +88,7 @@ class SubmitButton extends React.Component {
     render() {
         return (
             <RaisedButton label="Create Swap"
-                          secondary={true}
+                          primary={true}
                           onTouchTap={this.props.createSwap}
                           disabled={!this.props.hasDate()}/>
         );

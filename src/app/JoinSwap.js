@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import {deepOrange500} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {muiTheme} from './ColorScheme';
 
 const styles = {
   container: {
@@ -11,12 +10,6 @@ const styles = {
   },
 };
 
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
-});
-
 class JoinSwap extends Component {
   constructor(props, context) {
     super(props, context);
@@ -24,7 +17,9 @@ class JoinSwap extends Component {
       let userId = this.props.params['userId'];
       let swapId = this.props.params['swapId'];
 
-      this.selectBeer = this.selectBeer.bind(this);
+      this.hasBeer = this.hasBeer.bind(this);
+      this.onSelectBeer = this.onSelectBeer.bind(this);
+      this.onDontKnowBeer = this.onDontKnowBeer.bind(this);
 
     this.state = {
         userId: userId,
@@ -32,31 +27,30 @@ class JoinSwap extends Component {
     };
   }
 
-    createSwap = () => {
-        let swapDate = this.state.swapDate,
-            swapDateStr = swapDate.toDateString();
 
-        // validate the date
-        if (!swapDate) {
-          alert('No swap Date!');
-        }
-
-        //TODO: create the swap
-        // fetch('api/Beer/Swap/V1', {
-        //     method: 'post',
-        //     body: JSON.stringify({
-        //         SwapDate: swapDate,
-        //         Name: swapDateStr
-        //     })
-        // });
-
-        this.props.router.push('/invite');
+    hasBeer = () => {
+        return !!this.state.beerId;
     }
 
-    handleDateChange = (e, theDate) => {
-        this.setState({swapDate: theDate});
-        console.log("Date change", theDate);
+    componentWillMount() {
+        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Join/V1/' + this.state.swapId + '/' + this.state.userId;
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'post'
+        }).then(function(response) {
+            return response.json();
+        });
+    }
 
+    onSelectBeer() {
+        debugger;
+    }
+
+    onDontKnowBeer() {
+        debugger;
     }
 
   render() {
@@ -64,33 +58,35 @@ class JoinSwap extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <h1>Create a New Beer Swap</h1>
-            <DateSelector handleDateChange={this.handleDateChange}/>
-            <SubmitButton createSwap={this.createSwap} hasDate={this.hasDate}/>
+          <h1>Welcome!</h1>
+            <h2>What beer are you bringing?</h2>
+            <ChooseBeerSubmitButton onSelectBeer={this.onSelectBeer} hasBeer={this.hasBeer} />
+            <DontKnowSubmitButton onDontKnowBeer={this.onDontKnowBeer}/>
         </div>
       </MuiThemeProvider>
     );
   }
 }
 
-class DateSelector extends React.Component {
+class ChooseBeerSubmitButton extends React.Component {
     render() {
         return (
-            <DatePicker autoOk={true} hintText="Select a Date" minDate={new Date()} onChange={this.props.handleDateChange} />
+            <RaisedButton label="OK"
+                          primary={true}
+                          onTouchTap={this.props.onSelectBeer}/>
         );
     }
 }
 
-class SubmitButton extends React.Component {
+class DontKnowSubmitButton extends React.Component {
     render() {
         return (
-            <RaisedButton label="Create Swap"
+            <RaisedButton label="I don't know yet"
                           secondary={true}
-                          onTouchTap={this.props.createSwap}
-                          disabled={!this.props.hasDate()}/>
+                          onTouchTap={this.props.onDontKnowBeer}/>
         );
     }
 }
 
 
-export default CreateSwap;
+export default JoinSwap;

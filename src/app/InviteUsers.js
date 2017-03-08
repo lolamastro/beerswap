@@ -3,20 +3,13 @@ import List from 'material-ui/List';
 import ListItem from 'material-ui/List/ListItem';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
-import {deepOrange500} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {muiTheme} from './ColorScheme';
 
 const styles = {
   container: {
   },
 };
-
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
-});
 
 class InviteUsers extends Component {
   constructor(props, context) {
@@ -121,7 +114,7 @@ class InviteUsersButton extends React.Component {
     render() {
         return (
             <RaisedButton label="Invite Selected Users"
-                          secondary={true}
+                          primary={true}
                           onTouchTap={this.props.handleInviteUsers}
                           disabled={!this.props.hasSelectedUsers()}/>
         );
