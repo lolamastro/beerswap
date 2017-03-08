@@ -4,28 +4,28 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
 const styles = {
-  container: {
-    textAlign: 'center',
-    paddingTop: 200,
-  },
+    container: {
+        textAlign: 'center',
+        paddingTop: 200,
+    },
 };
 
 class JoinSwap extends Component {
-  constructor(props, context) {
-    super(props, context);
+    constructor(props, context) {
+        super(props, context);
 
-      let userId = this.props.params['userId'];
-      let swapId = this.props.params['swapId'];
+        let userId = this.props.params['userId'];
+        let swapId = this.props.params['swapId'];
 
-      this.hasBeer = this.hasBeer.bind(this);
-      this.onSelectBeer = this.onSelectBeer.bind(this);
-      this.onDontKnowBeer = this.onDontKnowBeer.bind(this);
+        this.hasBeer = this.hasBeer.bind(this);
+        this.onSelectBeer = this.onSelectBeer.bind(this);
+        this.onDontKnowBeer = this.onDontKnowBeer.bind(this);
 
-    this.state = {
-        userId: userId,
-        swapId: swapId
-    };
-  }
+        this.state = {
+            userId: userId,
+            swapId: swapId
+        };
+    }
 
 
     hasBeer = () => {
@@ -40,7 +40,7 @@ class JoinSwap extends Component {
             }),
             mode: 'cors',
             method: 'post'
-        }).then(function(response) {
+        }).then(function (response) {
             return response.json();
         });
     }
@@ -53,19 +53,19 @@ class JoinSwap extends Component {
         debugger;
     }
 
-  render() {
+    render() {
 
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
-          <h1>Welcome!</h1>
-            <h2>What beer are you bringing?</h2>
-            <ChooseBeerSubmitButton onSelectBeer={this.onSelectBeer} hasBeer={this.hasBeer} />
-            <DontKnowSubmitButton onDontKnowBeer={this.onDontKnowBeer}/>
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <div style={styles.container}>
+                    <h1>Welcome!</h1>
+                    <h2>What beer are you bringing?</h2>
+                    <ChooseBeerSubmitButton onSelectBeer={this.onSelectBeer} hasBeer={this.hasBeer}/>
+                    <DontKnowSubmitButton onDontKnowBeer={this.onDontKnowBeer}/>
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 class ChooseBeerSubmitButton extends React.Component {

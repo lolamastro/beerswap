@@ -7,29 +7,28 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
 const styles = {
-  container: {
-  },
+    container: {},
 };
 
 class InviteUsers extends Component {
-  constructor(props, context) {
-      super(props, context);
+    constructor(props, context) {
+        super(props, context);
 
-    this.hasSelectedUsers = this.hasSelectedUsers.bind(this);
-    this.handleInviteUsers = this.handleInviteUsers.bind(this);
-    this.handleSelectedUserChange = this.handleSelectedUserChange.bind(this);
-    this.getAvailableUsers = this.getAvailableUsers.bind(this);
+        this.hasSelectedUsers = this.hasSelectedUsers.bind(this);
+        this.handleInviteUsers = this.handleInviteUsers.bind(this);
+        this.handleSelectedUserChange = this.handleSelectedUserChange.bind(this);
+        this.getAvailableUsers = this.getAvailableUsers.bind(this);
 
-    this.state = {
-      selectedUsers: [],
-        availableUsers: []
-    };
-  }
+        this.state = {
+            selectedUsers: [],
+            availableUsers: []
+        };
+    }
 
 
     componentDidMount() {
         let me = this;
-        fetch('http://beerswap.enservio.lan/BeerWS/api/User/V1').then(function(response) {
+        fetch('http://beerswap.enservio.lan/BeerWS/api/User/V1').then(function (response) {
             return response.json();
         }).then(setUsers);
 
@@ -51,7 +50,7 @@ class InviteUsers extends Component {
         let selectedUsers = this.state.selectedUsers;
         // validate the date
         if (selectedUsers.length === 0) {
-          alert('No selected users');
+            alert('No selected users');
         }
         this.props.router.push('/swapcreated');
     }
@@ -72,18 +71,20 @@ class InviteUsers extends Component {
         });
     }
 
-  render() {
+    render() {
 
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
-          <h1>Invite Users to Beer Swap</h1>
-            <InviteList users={this.getAvailableUsers()} handleSelectedUserChange={this.handleSelectedUserChange} />
-            <InviteUsersButton handleInviteUsers={this.handleInviteUsers} hasSelectedUsers={this.hasSelectedUsers}/>
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <div style={styles.container}>
+                    <h1>Invite Users to Beer Swap</h1>
+                    <InviteList users={this.getAvailableUsers()}
+                                handleSelectedUserChange={this.handleSelectedUserChange}/>
+                    <InviteUsersButton handleInviteUsers={this.handleInviteUsers}
+                                       hasSelectedUsers={this.hasSelectedUsers}/>
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 class InviteList extends React.Component {
@@ -96,8 +97,8 @@ class InviteList extends React.Component {
         const users = this.props.users.map((user) => {
             return (
                 <ListItem key={user.UserId}
-                    leftCheckbox={<Checkbox id={user.UserId} onCheck={this.props.handleSelectedUserChange} />}
-                    primaryText={user.FirstName + ' ' + user.LastName}
+                          leftCheckbox={<Checkbox id={user.UserId} onCheck={this.props.handleSelectedUserChange}/>}
+                          primaryText={user.FirstName + ' ' + user.LastName}
                 />
             );
         });

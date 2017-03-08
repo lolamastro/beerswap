@@ -5,24 +5,24 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
 const styles = {
-  container: {
-    textAlign: 'center',
-    paddingTop: 200,
-  },
+    container: {
+        textAlign: 'center',
+        paddingTop: 200,
+    },
 };
 
 
 class CreateSwap extends Component {
-  constructor(props, context) {
-    super(props, context);
+    constructor(props, context) {
+        super(props, context);
 
-    this.createSwap = this.createSwap.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
+        this.createSwap = this.createSwap.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
 
-    this.state = {
-      swapDate: null
-    };
-  }
+        this.state = {
+            swapDate: null
+        };
+    }
 
     hasDate = () => {
         return !!this.state.swapDate;
@@ -35,7 +35,7 @@ class CreateSwap extends Component {
 
         // validate the date
         if (!swapDate) {
-          alert('No swap Date!');
+            alert('No swap Date!');
         }
 
         fetch('http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/V1', {
@@ -48,9 +48,9 @@ class CreateSwap extends Component {
                 SwapDate: swapDate,
                 Name: swapDateStr
             })
-        }).then(function(response) {
+        }).then(function (response) {
             return response.json();
-        }).then(function(j) {
+        }).then(function (j) {
             let swapId = j.SwapId;
             me.props.router.push('/invite/' + swapId);
         });
@@ -62,24 +62,25 @@ class CreateSwap extends Component {
 
     }
 
-  render() {
+    render() {
 
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
-          <h1>Create a New Beer Swap</h1>
-            <DateSelector handleDateChange={this.handleDateChange}/>
-            <SubmitButton createSwap={this.createSwap} hasDate={this.hasDate}/>
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <div style={styles.container}>
+                    <h1>Create a New Beer Swap</h1>
+                    <DateSelector handleDateChange={this.handleDateChange}/>
+                    <SubmitButton createSwap={this.createSwap} hasDate={this.hasDate}/>
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 class DateSelector extends React.Component {
     render() {
         return (
-            <DatePicker autoOk={true} hintText="Select a Date" minDate={new Date()} onChange={this.props.handleDateChange} />
+            <DatePicker autoOk={true} hintText="Select a Date" minDate={new Date()}
+                        onChange={this.props.handleDateChange}/>
         );
     }
 }
