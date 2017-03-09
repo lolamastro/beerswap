@@ -7,7 +7,6 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
-import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
 const styles = {
@@ -67,25 +66,29 @@ class JoinSwap extends Component {
     }
 
     handleBeerInput(txtValue, datasource) {
-        if (txtValue.length >= 3) {
-            let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/${txtValue}`;
-            let me = this;
-            fetch(url, {
-                mode: 'cors',
-                method: 'get'
-            }).then(function (response) {
-                    return response.json();
-            }).then(setBeers);
-
-            function setBeers(beers) {
-                me.setState({
-                    suggestions: beers
+        if (txtValue.indexOf(' ') > -1) {
+            let words = txtValue.split(' ');
+            if (words.length !== 0 && this.state.searchTerm !== words[0]) {
+                let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/${words[0]}`;
+                let me = this;
+                this.setState({
+                    searchTerm: words[0]
                 });
+                fetch(url, {
+                    mode: 'cors',
+                    method: 'get'
+                }).then(function (response) {
+                    return response.json();
+                }).then(setBeers);
+
+                function setBeers(beers) {
+                    let beerState = beers || [];
+                    me.setState({
+                        suggestions: beerState
+                    });
+
+                }
             }
-        } else {
-            this.setState({
-                suggestions: []
-            });
         }
     }
 
@@ -124,11 +127,14 @@ class JoinSwap extends Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
+                    <img src="images/logo.png" className="logo-sm" />\
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
                     <p style={styles.instruction}>If you don't know yet, just return to this page and tell us later.</p>
+                    <br/>
                     <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} onSelectBeer={this.onSelectBeer}/>
                     <ChooseBeerSubmitButton onHandleChooseBeer={this.onHandleChooseBeer} hasBeer={this.hasBeer}/>
+                    <br/>
                     <br/>
                     <BeerGridList swapId={this.state.swapId}  />
                 </div>
@@ -204,10 +210,6 @@ class BeerGridList extends Component {
         }
     }
 
-    handleExpandChange = (expanded) => {
-        this.setState({expanded: expanded});
-    };
-
     render() {
         return (
             <div style={styles.root}>
@@ -222,8 +224,7 @@ class BeerGridList extends Component {
                             <GridTile
                                 key={beer.BeerId}
                                 title={beer.Name}
-                                actionIcon={<IconButton><StarBorder color="white"/></IconButton>}
-                            >
+                                actionIcon={<IconButton><StarBorder color="white"/></IconButton>} >
                                 <img src={beer.Label}/>
                             </GridTile>
                         ))}
