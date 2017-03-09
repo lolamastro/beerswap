@@ -7,11 +7,14 @@ body {
   line-height: 20px;
 }
 
-
 img.logo {
   max-height: 150px;
 }
 
 img.logo-sm {
   max-height: 75px;
+}
+
+.instructions {
+  font-size: larger;
 }

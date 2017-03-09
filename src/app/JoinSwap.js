@@ -14,9 +14,6 @@ const styles = {
         textAlign: 'center',
         paddingTop: 20,
     },
-    instruction: {
-        fontSize: 'larger'
-    },
     chooseBeerButton: {
         marginLeft: 20
     }
@@ -114,10 +111,7 @@ class JoinSwap extends Component {
             mode: 'cors',
             method: 'put'
         }).then(function (response) {
-            return response.json();
-        }).then(function (j) {
-            //TODO: change this url
-            me.props.router.push('/swapcreated');
+            me.props.router.push('/beersaved');
         });
     }
 
@@ -130,7 +124,7 @@ class JoinSwap extends Component {
                     <img src="images/logo.png" className="logo-sm" />\
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
-                    <p style={styles.instruction}>If you don't know yet, just return to this page and tell us later.</p>
+                    <p className="instructions">If you don't know yet, just return to this page and tell us later.</p>
                     <br/>
                     <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} onSelectBeer={this.onSelectBeer}/>
                     <ChooseBeerSubmitButton onHandleChooseBeer={this.onHandleChooseBeer} hasBeer={this.hasBeer}/>
@@ -204,9 +198,11 @@ class BeerGridList extends Component {
         }).then(setCurrentBeers);
 
         function setCurrentBeers(beers) {
-            me.setState({
-                currentBeers: beers
-            });
+            if (Array.isArray(beers)) {
+                me.setState({
+                    currentBeers: beers
+                });
+            }
         }
     }
 

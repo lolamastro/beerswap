@@ -5,6 +5,7 @@ import {Router, Route, hashHistory} from 'react-router';
 import CreateSwap from './CreateSwap';
 import InviteUsers from './InviteUsers';
 import SwapCreated from './SwapCreated';
+import BeerSaved from './BeerSaved';
 import JoinSwap from './JoinSwap';
 
 // Needed for onTouchTap
@@ -20,6 +21,7 @@ render((
         <Route name="createSwap" path="/" component={CreateSwap}/>
         <Route name="invite" path="/invite/:swapId" component={InviteUsers}/>
         <Route name="swapcreated" path="/swapcreated" component={SwapCreated}/>
+        <Route name="beersaved" path="/beersaved" component={BeerSaved}/>
         <Route name="join" path="/join/:userId/:swapId" component={JoinSwap}/>
     </Router>
 ), document.getElementById('app'));
