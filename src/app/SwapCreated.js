@@ -38,6 +38,7 @@ class SwapCreated extends Component {
         this.handleRemindUsers = this.handleRemindUsers.bind(this);
         this.handleFinalizeSwap = this.handleFinalizeSwap.bind(this);
         this.handleStartSwap = this.handleStartSwap.bind(this);
+        this.handleViewSwap = this.handleViewSwap.bind(this);
 
         this.isReminderSent = this.isReminderSent.bind(this);
     }
@@ -52,7 +53,28 @@ class SwapCreated extends Component {
 
     handleRemindUsers = () => {
         this.setState({reminderSent: true});
-        alert('not implemented yet');
+        let me = this;
+        let swapId = this.state.swapId;
+        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Remind/V1/' + swapId;
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'post'
+        }).then(function (response) {
+            return response.json();
+        }).then(writeUsers);
+
+        function writeUsers(data) {
+            me.setState({reminderSent: true});
+            console.log(users);
+        }
+    }
+
+    handleViewSwap = () => {
+        let swapId = this.state.swapId;
+        this.props.router.push('/beers/' + swapId);
     }
 
     handleFinalizeSwap = () => {
@@ -94,6 +116,7 @@ class SwapCreated extends Component {
                     <br/>
                     <ReminderEmailButton handleRemindUsers={this.handleRemindUsers} disableButton={this.isReminderSent()}></ReminderEmailButton>
                     <FinalizeButton handleFinalizeSwap={this.handleFinalizeSwap} disableButton={this.isFinalizeSent()}></FinalizeButton>
+                    <ViewSwapButton handleViewSwap={this.handleViewSwap}></ViewSwapButton>
                     <StartSwapButton handleStartSwap={this.handleStartSwap}></StartSwapButton>
                 </div>
             </MuiThemeProvider>
@@ -130,6 +153,20 @@ class FinalizeButton extends React.Component {
 }
 
 
+class ViewSwapButton extends React.Component {
+    render() {
+        return (
+            <RaisedButton style={styles.button}
+                          label="View Beers"
+                          secondary={true}
+                          onTouchTap={this.props.handleViewSwap}
+            />
+        );
+    }
+}
+
+
+
 class StartSwapButton extends React.Component {
     render() {
         return (
@@ -141,6 +178,5 @@ class StartSwapButton extends React.Component {
         );
     }
 }
-
 
 export default SwapCreated;
