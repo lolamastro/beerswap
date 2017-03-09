@@ -140,7 +140,7 @@ class JoinSwap extends Component {
 class BeerAutoComplete extends React.Component {
 
     filterBeers = (searchText, key) => {
-        let match = searchText !== '' && key.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+        let match = searchText !== '' && key.toLowerCase().indexOf(searchText.trim().toLowerCase()) > -1;
         return match;
     }
 
