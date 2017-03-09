@@ -23,50 +23,6 @@ const styles = {
     }
 };
 
-const tilesData = [
-    {
-        img: 'http://www.material-ui.com/images/grid-list/00-52-29-429_640.jpg',
-        title: 'Breakfast',
-        author: 'jill111',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/burger-827309_640.jpg',
-        title: 'Tasty burger',
-        author: 'pashminu',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/camera-813814_640.jpg',
-        title: 'Camera',
-        author: 'Danson67',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/morning-819362_640.jpg',
-        title: 'Morning',
-        author: 'fancycrave1',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/hats-829509_640.jpg',
-        title: 'Hats',
-        author: 'Hans',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/honey-823614_640.jpg',
-        title: 'Honey',
-        author: 'fancycravel',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/vegetables-790022_640.jpg',
-        title: 'Vegetables',
-        author: 'jill111',
-    },
-    {
-        img: 'http://www.material-ui.com/images/grid-list/water-plant-821293_640.jpg',
-        title: 'Water plant',
-        author: 'BkrmadtyaKarki',
-    }
-];
-
-
 class JoinSwap extends Component {
     constructor(props, context) {
         super(props, context);
@@ -83,15 +39,19 @@ class JoinSwap extends Component {
             userId: userId,
             swapId: swapId,
             suggestions: [],
+            currentBeers: [],
             beerId: null
         };
     }
 
-
     componentWillMount() {
         // Associate this user with this beer swap
-        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Join/V1/' + this.state.swapId + '/' + this.state.userId;
-        fetch(url, {
+        let swapId = this.state.swapId,
+            userId = this.state.userId,
+            joinUrl = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Join/V1/${swapId}/${userId}`,
+            me = this;
+
+        fetch(joinUrl, {
             headers: new Headers({
                 'Content-Type': 'application/json'
             }),
@@ -108,7 +68,7 @@ class JoinSwap extends Component {
 
     handleBeerInput(txtValue, datasource) {
         if (txtValue.length >= 3) {
-            let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/' + txtValue;
+            let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/${txtValue}`;
             let me = this;
             fetch(url, {
                 mode: 'cors',
@@ -166,11 +126,11 @@ class JoinSwap extends Component {
                 <div style={styles.container}>
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
+                    <p style={styles.instruction}>If you don't know yet, just return to this page and tell us later.</p>
                     <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} onSelectBeer={this.onSelectBeer}/>
                     <ChooseBeerSubmitButton onHandleChooseBeer={this.onHandleChooseBeer} hasBeer={this.hasBeer}/>
                     <br/>
-                    <p style={styles.instruction}>If you don't know yet, just return to this page and tell us later.</p>
-                    <BeerGridList />
+                    <BeerGridList swapId={this.state.swapId}  />
                 </div>
             </MuiThemeProvider>
         );
@@ -216,7 +176,31 @@ class BeerGridList extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            expanded: false
+            expanded: false,
+            swapId: this.props.swapId,
+            currentBeers: []
+        }
+    }
+
+    componentWillMount() {
+        // Get the beers associated with this beer swap
+        let me = this,
+            swapId = this.state.swapId,
+            getBeersUrl = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/${swapId}`;
+        fetch(getBeersUrl, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'get'
+        }).then(function (response) {
+            return response.json();
+        }).then(setCurrentBeers);
+
+        function setCurrentBeers(beers) {
+            me.setState({
+                currentBeers: beers
+            });
         }
     }
 
@@ -227,24 +211,20 @@ class BeerGridList extends Component {
     render() {
         return (
             <div style={styles.root}>
-                <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+                <Card >
                     <CardHeader
                         title="Here is what others are bringing."
-                        actAsExpander={true}
-                        showExpandableButton={true}
                     />
                     <GridList
                         cellHeight={180}
                         style={styles.gridList}>
-                        <Subheader>December</Subheader>
-                        {tilesData.map((tile) => (
+                        {this.state.currentBeers.map((beer) => (
                             <GridTile
-                                key={tile.img}
-                                title={tile.title}
-                                subtitle={<span>by <b>{tile.author}</b></span>}
+                                key={beer.BeerId}
+                                title={beer.Name}
                                 actionIcon={<IconButton><StarBorder color="white"/></IconButton>}
                             >
-                                <img src={tile.img}/>
+                                <img src={beer.Label}/>
                             </GridTile>
                         ))}
                     </GridList>
