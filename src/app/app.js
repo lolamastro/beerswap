@@ -22,7 +22,7 @@ render((
         <Route name="createSwap" path="/" component={CreateSwap}/>
         <Route name="invite" path="/invite/:swapId" component={InviteUsers}/>
         <Route name="swapcreated" path="/swapcreated/:swapId" component={SwapCreated}/>
-        <Route name="beersaved" path="/beersaved" component={BeerSaved}/>
+        <Route name="beersaved" path="/beersaved/:swapId" component={BeerSaved}/>
         <Route name="join" path="/join/:userId/:swapId" component={JoinSwap}/>
         <Route name="beers" path="/beers/:swapId" component={BeerList}/>
     </Router>

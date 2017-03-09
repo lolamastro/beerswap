@@ -111,7 +111,7 @@ class JoinSwap extends Component {
             mode: 'cors',
             method: 'put'
         }).then(function (response) {
-            me.props.router.push('/beersaved');
+            me.props.router.push('/beersaved/' + swapId);
         });
     }
 
@@ -219,9 +219,9 @@ class BeerGridList extends Component {
                         {this.state.currentBeers.map((beer) => (
                             <GridTile
                                 key={beer.BeerId}
-                                title={beer.Name}
+                                title={beer.BeerName}
                                 actionIcon={<IconButton><StarBorder color="white"/></IconButton>} >
-                                <img src={beer.Label}/>
+                                <img src={beer.Label} />
                             </GridTile>
                         ))}
                     </GridList>
