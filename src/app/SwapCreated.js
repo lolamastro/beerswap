@@ -52,11 +52,27 @@ class SwapCreated extends Component {
 
     handleRemindUsers = () => {
         this.setState({reminderSent: true});
+        alert('not implemented yet');
     }
 
     handleFinalizeSwap = () => {
         this.setState({finalizeSent: true});
-        //api/Beer/Swap/attendees/randomize/V1/{swapId}
+
+        let swapId = this.state.swapId;
+        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/randomize/V1/' + swapId;
+        fetch(url, {
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            mode: 'cors',
+            method: 'put'
+        }).then(function (response) {
+            return response.json();
+        }).then(writeUsers);
+
+        function writeUsers(users) {
+            console.log(users);
+        }
     }
 
     handleStartSwap = () => {
