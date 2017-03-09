@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
     container: {
@@ -15,13 +16,53 @@ const styles = {
         padding: 50,
         textAlign: 'center',
         display: 'inline-block'
+    },
+    button: {
+        margin:20
+
     }
 };
 
 class SwapCreated extends Component {
     constructor(props, context) {
         super(props, context);
+
+        let swapId = this.props.params['swapId'];
+
+        this.state = {
+            reminderSent: false,
+            finalizeSent: false,
+            swapId: swapId
+        };
+
+        this.handleRemindUsers = this.handleRemindUsers.bind(this);
+        this.handleFinalizeSwap = this.handleFinalizeSwap.bind(this);
+        this.handleStartSwap = this.handleStartSwap.bind(this);
+
+        this.isReminderSent = this.isReminderSent.bind(this);
     }
+
+    isReminderSent = () => {
+        return this.state.reminderSent;
+    }
+
+    isFinalizeSent = () => {
+        return this.state.finalizeSent;
+    }
+
+    handleRemindUsers = () => {
+        this.setState({reminderSent: true});
+    }
+
+    handleFinalizeSwap = () => {
+        this.setState({finalizeSent: true});
+        //api/Beer/Swap/attendees/randomize/V1/{swapId}
+    }
+
+    handleStartSwap = () => {
+
+    }
+
 
     render() {
         return (
@@ -32,11 +73,58 @@ class SwapCreated extends Component {
                     <Paper style={styles.paper} zDepth={2}>
                         <h1>Swap was created</h1>
                         <h2>and emails have been sent.</h2>
+                        <p className="instructions">Bookmark this page to come back and administer the swap.</p>
                     </Paper>
+                    <br/>
+                    <ReminderEmailButton handleRemindUsers={this.handleRemindUsers} disableButton={this.isReminderSent()}></ReminderEmailButton>
+                    <FinalizeButton handleFinalizeSwap={this.handleFinalizeSwap} disableButton={this.isFinalizeSent()}></FinalizeButton>
+                    <StartSwapButton handleStartSwap={this.handleStartSwap}></StartSwapButton>
                 </div>
             </MuiThemeProvider>
         );
     }
 }
+
+
+class ReminderEmailButton extends React.Component {
+    render() {
+        return (
+            <RaisedButton style={styles.button}
+                          label="Send Reminder Email"
+                          secondary={true}
+                          onTouchTap={this.props.handleRemindUsers}
+                          disabled={this.props.disableButton}
+            />
+        );
+    }
+}
+
+
+class FinalizeButton extends React.Component {
+    render() {
+        return (
+            <RaisedButton style={styles.button}
+                          label="Finalize Swap"
+                          secondary={true}
+                          onTouchTap={this.props.handleFinalizeSwap}
+                          disabled={this.props.disableButton}
+            />
+        );
+    }
+}
+
+
+class StartSwapButton extends React.Component {
+    render() {
+        return (
+            <RaisedButton style={styles.button}
+                          label="Start Swap"
+                          primary={true}
+                          onTouchTap={this.props.handleStartSwap}
+            />
+        );
+    }
+}
+
 
 export default SwapCreated;

@@ -71,7 +71,7 @@ class InviteUsers extends Component {
             method: 'post',
             body: JSON.stringify(selectedUsers)
         }).then(function () {
-            me.props.router.push('/swapcreated');
+            me.props.router.push('/swapcreated/' + swapId);
         });
     }
 
