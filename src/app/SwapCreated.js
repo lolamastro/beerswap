@@ -56,8 +56,7 @@ class SwapCreated extends Component {
     }
 
     handleFinalizeSwap = () => {
-        this.setState({finalizeSent: true});
-
+        let me = this;
         let swapId = this.state.swapId;
         let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/randomize/V1/' + swapId;
         fetch(url, {
@@ -71,6 +70,7 @@ class SwapCreated extends Component {
         }).then(writeUsers);
 
         function writeUsers(users) {
+            me.setState({finalizeSent: true});
             console.log(users);
         }
     }
