@@ -48,7 +48,7 @@ class InviteUsers extends Component {
         function setUsers(users) {
             me.setState({
                 availableUsers: users,
-                selectedUsers: me.state.select ? users : []
+                selectedUsers: me.state.select ? users.map(user => user.UserId) : []
             });
         }
     }
@@ -59,7 +59,7 @@ class InviteUsers extends Component {
         if (checkedState) {
             let allUsers = this.state.availableUsers.slice();
             this.setState({
-                selectedUsers: allUsers
+                selectedUsers: allUsers.map(user => user.UserId)
             });
         } else {
             this.setState({
@@ -70,7 +70,7 @@ class InviteUsers extends Component {
 
     isChecked = (userId) => {
         let selectedUsers = this.state.selectedUsers.slice();
-        return selectedUsers.filter(user => user.UserId === userId).length > 0;
+        return selectedUsers.filter(user => user == userId).length > 0;
     }
 
     getAvailableUsers = () => {
@@ -104,7 +104,6 @@ class InviteUsers extends Component {
     handleSelectedUserChange = (e, checked) => {
         let userId = e.target.id,
             selectedUsers = this.state.selectedUsers.slice();
-
         if (checked) {
             selectedUsers.push(userId);
         } else {
