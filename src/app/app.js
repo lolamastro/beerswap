@@ -8,6 +8,7 @@ import SwapCreated from './SwapCreated';
 import BeerSaved from './BeerSaved';
 import JoinSwap from './JoinSwap';
 import BeerList from './BeerList';
+import AllBeerList from './AllBeerList';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -25,5 +26,6 @@ render((
         <Route name="beersaved" path="/beersaved/:swapId" component={BeerSaved}/>
         <Route name="join" path="/join/:userId/:swapId" component={JoinSwap}/>
         <Route name="beers" path="/beers/:swapId" component={BeerList}/>
+        <Route name="allbeers" path="/allbeers/" component={AllBeerList}/>
     </Router>
 ), document.getElementById('app'));
