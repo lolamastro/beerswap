@@ -12,6 +12,9 @@ const styles = {
     },
     logoContainer: {
         textAlign: 'center'
+    },
+    selectAllCheck: {
+        paddingLeft: 14
     }
 };
 
@@ -25,16 +28,18 @@ class InviteUsers extends Component {
         this.handleInviteUsers = this.handleInviteUsers.bind(this);
         this.handleSelectedUserChange = this.handleSelectedUserChange.bind(this);
         this.getAvailableUsers = this.getAvailableUsers.bind(this);
+        this.isChecked = this.isChecked.bind(this);
 
         this.state = {
             selectedUsers: [],
             availableUsers: [],
-            swapId: swapId
+            swapId: swapId,
+            select: true
         };
     }
 
 
-    componentDidMount() {
+    componentWillMount() {
         let me = this;
         fetch('http://beerswap.enservio.lan/BeerWS/api/User/V1').then(function (response) {
             return response.json();
@@ -42,9 +47,30 @@ class InviteUsers extends Component {
 
         function setUsers(users) {
             me.setState({
-                availableUsers: users
+                availableUsers: users,
+                selectedUsers: me.state.select ? users : []
             });
         }
+    }
+
+
+    handleToggle = (e, checkedState) => {
+        this.setState({select: checkedState});
+        if (checkedState) {
+            let allUsers = this.state.availableUsers.slice();
+            this.setState({
+                selectedUsers: allUsers
+            });
+        } else {
+            this.setState({
+                selectedUsers: []
+            });
+        }
+    }
+
+    isChecked = (userId) => {
+        let selectedUsers = this.state.selectedUsers.slice();
+        return selectedUsers.filter(user => user.UserId === userId).length > 0;
     }
 
     getAvailableUsers = () => {
@@ -100,7 +126,10 @@ class InviteUsers extends Component {
                     <img src="images/logo.png" className="logo-sm" />
                     </div>
                     <h1>Invite Users to Beer Swap</h1>
+                    <Checkbox onCheck={this.handleToggle} checked={this.state.select} style={styles.selectAllCheck} label="Select all/none"/>
+                    <hr/>
                     <InviteList users={this.getAvailableUsers()}
+                                isChecked={this.isChecked}
                                 handleSelectedUserChange={this.handleSelectedUserChange}/>
                     <InviteUsersButton handleInviteUsers={this.handleInviteUsers}
                                        hasSelectedUsers={this.hasSelectedUsers}/>
@@ -120,7 +149,7 @@ class InviteList extends React.Component {
         const users = this.props.users.map((user) => {
             return (
                 <ListItem key={user.UserId}
-                          leftCheckbox={<Checkbox id={user.UserId} onCheck={this.props.handleSelectedUserChange}/>}
+                          leftCheckbox={<Checkbox id={user.UserId} checked={this.props.isChecked(user.UserId)} onCheck={this.props.handleSelectedUserChange}/>}
                           primaryText={user.FirstName + ' ' + user.LastName}
                 />
             );
