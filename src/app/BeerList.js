@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {muiTheme} from './ColorScheme';
-import List from 'material-ui/List';
 import ListItem from 'material-ui/List/ListItem';
+import Drawer from 'material-ui/Drawer';
+import RaisedButton from 'material-ui/RaisedButton';
+import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
+import {muiTheme} from './ColorScheme';
 
 const styles = {
     container: {
@@ -37,14 +39,18 @@ class BeerList extends Component {
 
         this.state = {
             swapId: swapId,
-            beerList: []
+            userBeerList: [],
+            open: false
         };
     }
+
+    handleToggle = () => this.setState({open: !this.state.open});
 
     componentWillMount() {
         // get the beers for this swap
         let swapId = this.state.swapId,
-            url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/${swapId}`,
+            // url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/${swapId}`,
+            url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/V1/${swapId}`,
             me = this;
 
         fetch(url, {
@@ -58,10 +64,10 @@ class BeerList extends Component {
         }).then(setBeerList);
 
         function setBeerList (beerList) {
-            if (Array.isArray(beerList)) {
+            if (beerList && beerList instanceof Object && beerList.UserSelections && Array.isArray(beerList.UserSelections)) {
                 me.setState({
-                    beerList: beerList
-                })
+                    userBeerList: beerList.UserSelections
+                });
             }
         }
     }
@@ -78,17 +84,26 @@ class BeerList extends Component {
     }
 
     render() {
-        const beers = this.state.beerList.slice();
+        const userBeers = this.state.userBeerList.slice();
+        const users = userBeers.map((user) => {
+            return (
+                <ListItem key={user.$id}
+                          primaryText={user.FirstName + ' ' + user.LastName}
+                          leftAvatar={<Avatar>{user.SelectionOrder > 0 ? user.SelectionOrder : '?'}</Avatar>}
+                />
+            );
+        });
 
-        const beerList = beers.map((beer) => (
-            <tr key={beer.BeerId}>
+        const userBeerList = userBeers.map((userBeer) => (
+            <tr key={userBeer.BeerSelection.BeerId}>
                 <td>
-                    <img src= {beer.Label} style={styles.img}/>
+                    <img src= {userBeer.BeerSelection.Label} style={styles.img}/>
                 </td>
                 <td>
-                    <span style={styles.beerName}> {beer.BeerName}</span> <span style={styles.abv}>{beer.Abv}</span> &nbsp; | {this.getBreweryName(beer.Brewery)}
+                    <span style={styles.beerName}> {userBeer.BeerSelection.BeerName}</span>
+                    <span style={styles.abv}>{userBeer.BeerSelection.Abv}</span> &nbsp; | {this.getBreweryName(userBeer.BeerSelection.Brewery)}
                     <br/>
-                    {beer.BeerDescription}
+                    {userBeer.BeerSelection.BeerDescription}
                 </td>
             </tr>
         ));
@@ -97,9 +112,19 @@ class BeerList extends Component {
                 <div style={styles.container}>
                     <img src="images/logo.png" className="logo-sm" />
                     <h1>Beer List</h1>
+                    <div>
+                        <RaisedButton
+                            label="Show Users"
+                            onTouchTap={this.handleToggle}
+                        />
+                        <Drawer open={this.state.open} openSecondary={true} style={styles.list}>
+                            <Subheader style={styles.container}>Users</Subheader>
+                            {users}
+                        </Drawer>
+                    </div>
                     <table  style={styles.list}>
                         <tbody>
-                        {beerList}
+                        {userBeerList}
                         </tbody>
                     </table>
                 </div>
