@@ -26,6 +26,6 @@ render((
         <Route name="beersaved" path="/beersaved/:swapId" component={BeerSaved}/>
         <Route name="join" path="/join/:userId/:swapId" component={JoinSwap}/>
         <Route name="beers" path="/beers/:swapId" component={BeerList}/>
-        <Route name="allbeers" path="/allbeers/" component={AllBeerList}/>
+        <Route name="allbeers" path="/allbeers" component={AllBeerList}/>
     </Router>
 ), document.getElementById('app'));
