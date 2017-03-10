@@ -114,7 +114,7 @@ class BeerList extends Component {
                     <h1>Beer List</h1>
                     <div>
                         <RaisedButton
-                            label="Show Users"
+                            label="Draft Order"
                             onTouchTap={this.handleToggle}
                         />
                         <Drawer open={this.state.open} openSecondary={true} style={styles.list}>
