@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
-import {setSwapId} from './actions/RunSwapActions';
+import {setSwapId, fetchSwap} from './actions/RunSwapActions';
+import {deepOrange500} from 'material-ui/styles/colors';
 
 const styles = {
     container: {
@@ -11,6 +11,9 @@ const styles = {
     },
     button: {
         margin:20
+    },
+    user: {
+        color: deepOrange500
     }
 };
 
@@ -23,19 +26,32 @@ class RunSwap extends Component {
         store.dispatch(setSwapId(swapId));
     }
 
+    componentDidMount() {
+        const { store } = this.context;
+        this.unsubscribe = store.subscribe(() => this.forceUpdate());
+
+        let swapId = this.props.params['swapId'];
+        store.dispatch(fetchSwap(swapId));
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+
     render() {
 
         const { store } = this.context;
+
+        let currentUser = store.getState().runSwap.get('currentUser');
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
                     <img src="images/logo.png" className="logo-sm" />
                     <br/>
-                    <Paper style={styles.paper} zDepth={2}>
-                        <h1>USER Pick Beer</h1>
-                        <p className="instructions">Click on the beer you want.</p>
-                    </Paper>
+                    <h1><span style={styles.user}>{currentUser}</span> pick a beer</h1>
+                    <p className="instructions">Click on the beer you want.</p>
                     <br/>
 
                 </div>
