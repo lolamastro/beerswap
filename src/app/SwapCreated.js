@@ -98,9 +98,9 @@ class SwapCreated extends Component {
     }
 
     handleStartSwap = () => {
-
+        let swapId = this.state.swapId;
+        this.props.router.push('/runswap/' + swapId);
     }
-
 
     render() {
         return (

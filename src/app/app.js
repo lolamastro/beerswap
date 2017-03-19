@@ -12,6 +12,7 @@ import BeerSaved from './BeerSaved';
 import JoinSwap from './JoinSwap';
 import BeerList from './BeerList';
 import AllBeerList from './AllBeerList';
+import RunSwap from './RunSwap';
 
 
 // Needed for onTouchTap
@@ -34,6 +35,7 @@ render((
         <Route name="join" path="/join/:userId/:swapId" component={JoinSwap}/>
         <Route name="beers" path="/beers/:swapId" component={BeerList}/>
         <Route name="allbeers" path="/allbeers" component={AllBeerList}/>
+        <Route name="runswap" path="/runswap/:swapId" component={RunSwap}/>
     </Router>
     </Provider>
 ), document.getElementById('app'));
