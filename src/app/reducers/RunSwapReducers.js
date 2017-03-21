@@ -5,7 +5,8 @@ const initialState = fromJS({
     attendees: [],
     currentUser: null,
     availableBeers: [],
-    isGoingDown: true
+    isGoingDown: true,
+    timerState: 0
 });
 
 export const runSwapReducers = (state = initialState, action) => {
@@ -13,8 +14,8 @@ export const runSwapReducers = (state = initialState, action) => {
         case 'SET_SWAP':
             return state.set('swapId', action.swapId);
 
-        case 'LOAD_SWAP':
-            console.log('Load swap');
+        case 'INCREMENT_TIME':
+            return state.set('timerState', action.val);
 
         case 'RECEIVE_SWAP':
             return state.set('currentUser', action.attendees[0]).
@@ -34,7 +35,8 @@ export const runSwapReducers = (state = initialState, action) => {
                 currentUser = attendees[idx - 1];
             }
             return state.set('currentUser', currentUser).
-                         set('isGoingDown', isGoingDown);
+                         set('isGoingDown', isGoingDown).
+                         set('timerState', 0);
 
         case 'COMPLETE_SELECT_BEER':
             let beers = state.get('availableBeers'),

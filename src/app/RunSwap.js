@@ -4,7 +4,7 @@ import {muiTheme} from './ColorScheme';
 import {GridList, GridTile} from 'material-ui/GridList';
 import {CircularProgress} from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
-import {setSwapId, fetchSwap, selectBeer, completeUserSelection} from './actions/RunSwapActions';
+import {setSwapId, fetchSwap, selectBeer, completeUserSelection, incrementTime} from './actions/RunSwapActions';
 import {deepOrange500} from 'material-ui/styles/colors';
 import CountdownProgress from './CountdownProgress';
 
@@ -34,6 +34,7 @@ class RunSwap extends Component {
         let swapId = this.props.params['swapId'];
         const { store } = this.context;
         store.dispatch(setSwapId(swapId));
+        this.handleIncrement = this.handleIncrement.bind(this);
     }
 
     componentDidMount() {
@@ -62,12 +63,18 @@ class RunSwap extends Component {
         audio.play();
     }
 
+    handleIncrement(val) {
+        const { store } = this.context;
+        store.dispatch(incrementTime(val));
+    }
+
     render() {
 
         const { store } = this.context;
 
         let currentUser = store.getState().runSwap.get('currentUser'),
             beers = store.getState().runSwap.get('availableBeers'),
+            timerState = store.getState().runSwap.get('timerState'),
             userName = currentUser ? `${currentUser.FirstName} ${currentUser.LastName}` : null,
             gridTiles = null;
 
@@ -90,7 +97,7 @@ class RunSwap extends Component {
                     <img src="images/logo.png" className="logo-sm" />
                     <br/>
                     <h1><span style={styles.user}>{userName}</span> pick a beer</h1>
-                    <CountdownProgress completeCallback={this.handleCountdownEnd}/>
+                    <CountdownProgress completeCallback={this.handleCountdownEnd} incrementCallback={this.handleIncrement} timerState={timerState}/>
                     <p className="instructions">Click on the beer you want.</p>
                     <br/>
                     <GridList

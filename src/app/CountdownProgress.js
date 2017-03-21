@@ -5,37 +5,39 @@ export default class CountdownProgress extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            completed: 0,
-        };
-    }
-
-    componentDidMount() {
-        this.timer = setTimeout(() => this.progress(5), 1000);
     }
 
     componentWillUnmount() {
         clearTimeout(this.timer);
     }
 
+    startTimer() {
+        this.timer = setTimeout(() => this.progress(5), 1000);
+    }
+
     progress(completed) {
         if (completed > 100) {
-            this.setState({completed: 100});
             this.props.completeCallback();
         } else {
-            this.setState({completed});
-            const diff = Math.random() * 10;
+            this.props.incrementCallback(completed);
+            const diff = 5;
             this.timer = setTimeout(() => this.progress(completed + diff), 1000);
         }
     }
 
     render() {
+        if (this.props.timerState === 0) {
+            if (this.timer) {
+                clearTimeout(this.timer);
+            }
+            this.startTimer();
+        }
+
         return (
             <div>
                 <CircularProgress
                     mode="determinate"
-                    value={this.state.completed}
+                    value={this.props.timerState}
                     size={80}
                     thickness={8}
                 />

@@ -75,3 +75,10 @@ export function completeUserSelection(currentUser) {
         currentUser
     }
 }
+
+export function incrementTime(val) {
+    return {
+        type: 'INCREMENT_TIME',
+        val
+    }
+}
