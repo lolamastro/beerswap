@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 import {GridList, GridTile} from 'material-ui/GridList';
+import {CircularProgress} from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import {setSwapId, fetchSwap, selectBeer, completeUserSelection} from './actions/RunSwapActions';
 import {deepOrange500} from 'material-ui/styles/colors';
+import CountdownProgress from './CountdownProgress';
 
 const styles = {
     container: {
@@ -13,6 +15,9 @@ const styles = {
     },
     button: {
         margin:20
+    },
+    tile: {
+        cursor: 'pointer'
     },
     qty: {
         margin:20
@@ -52,6 +57,11 @@ class RunSwap extends Component {
 
     }
 
+    handleCountdownEnd() {
+        var audio = new Audio('sound/shimmer.wav');
+        audio.play();
+    }
+
     render() {
 
         const { store } = this.context;
@@ -69,7 +79,8 @@ class RunSwap extends Component {
                     title={beer.BeerName}
                     actionIcon={<Avatar style={styles.qty}>{beer.qty}</Avatar>}
                     onClick={this.clickTile.bind(this, beer.BeerId)}>
-                    <img src={beer.Label} />
+                    <img src={beer.Label}
+                         style={styles.tile} />
                 </GridTile>
             ));
         }
@@ -79,9 +90,9 @@ class RunSwap extends Component {
                     <img src="images/logo.png" className="logo-sm" />
                     <br/>
                     <h1><span style={styles.user}>{userName}</span> pick a beer</h1>
+                    <CountdownProgress completeCallback={this.handleCountdownEnd}/>
                     <p className="instructions">Click on the beer you want.</p>
                     <br/>
-
                     <GridList
                         cellHeight={180}>
                         {gridTiles}
