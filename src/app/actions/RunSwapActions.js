@@ -47,14 +47,14 @@ export function selectBeer(swapId, userId, beerId) {
 
         // In this case, we return a promise to wait for.
         // This is not required by thunk middleware, but it is convenient for us.
-        let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/V1/${swapId}`;
+        let url = `http://beerswap.enservio.lan/BeerWS/api/User/Swap/Selection/V1/${swapId}/${userId}/${beerId}`;
 
         return fetch(url, {
             headers: new Headers({
                 'Content-Type': 'application/json'
             }),
             mode: 'cors',
-            method: 'get'
+            method: 'post'
         }).then(() =>
             // Here, we update the app state with the results of the API call.
             dispatch(completeSelectBeer(beerId))
