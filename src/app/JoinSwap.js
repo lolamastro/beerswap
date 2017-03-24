@@ -124,7 +124,13 @@ class JoinSwap extends Component {
                     <img src="images/logo.png" className="logo-sm" />
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
-                    <p className="instructions">If you don't know yet, just return to this page and tell us later.</p>
+                    <p className="instructions">
+                        If you don't know yet, just return to this page and tell us later.
+                    </p>
+                    <p className="instructions">
+                        Don't see your beer? &nbsp;
+                        <a href="mailto:jskorb@enservio.com?Subject=Beer%20Swap">Email Skorb</a> and tell him what your bringing.
+                    </p>
                     <br/>
                     <BeerAutoComplete suggestions={this.state.suggestions} handleUpdateInput={this.handleBeerInput} onSelectBeer={this.onSelectBeer}/>
                     <ChooseBeerSubmitButton onHandleChooseBeer={this.onHandleChooseBeer} hasBeer={this.hasBeer}/>
