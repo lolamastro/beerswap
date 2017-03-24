@@ -52,7 +52,17 @@ class RunSwap extends Component {
     clickTile(beerId) {
         const { store } = this.context;
         let swapId = store.getState().runSwap.get('swapId'),
-            currentUser = store.getState().runSwap.get('currentUser');
+            currentUser = store.getState().runSwap.get('currentUser'),
+            beers = store.getState().runSwap.get('availableBeers');
+        for (let i = 0; i < beers.length; i++) {
+            if (beers[0].BeerId === beerId) {
+                if (beers[0].qty === 0) {
+                    alert('There is no more of that beer!');
+                    return;
+                }
+                break;
+            }
+        }
         Promise.resolve(store.dispatch(selectBeer(swapId, currentUser.Id, beerId)).
             then(store.dispatch(completeUserSelection(currentUser))));
 
