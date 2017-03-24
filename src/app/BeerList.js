@@ -101,7 +101,7 @@ class BeerList extends Component {
                 </td>
                 <td>
                     <span style={styles.beerName}> {userBeer.BeerSelection.BeerName}</span>
-                    <span style={styles.abv}>{userBeer.BeerSelection.Abv}</span> &nbsp; | {this.getBreweryName(userBeer.BeerSelection.Brewery)}
+                    <span style={styles.abv}>&nbsp; {userBeer.BeerSelection.Abv}%</span> &nbsp; | {this.getBreweryName(userBeer.BeerSelection.Brewery)}
                     <br/>
                     {userBeer.BeerSelection.BeerDescription}
                 </td>
