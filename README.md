@@ -15,6 +15,10 @@ npm start
 ```
 Server is located at http://localhost:3000
 
+To build the files 
+ npm run build
+```
+
 Note: To allow external viewing of the demo, change the following value in `webpack-dev-server.config.js`
 
 ```
