@@ -121,7 +121,7 @@ class JoinSwap extends Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
-                    <img src="images/logo.png" className="logo-sm" />\
+                    <img src="images/logo.png" className="logo-sm" />
                     <h1>Welcome!</h1>
                     <h2>What beer are you bringing?</h2>
                     <p className="instructions">If you don't know yet, just return to this page and tell us later.</p>
