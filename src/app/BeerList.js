@@ -94,7 +94,9 @@ class BeerList extends Component {
             );
         });
 
-        const userBeerList = userBeers.map((userBeer) => (
+        const userBeerList = userBeers
+            .filter(userBeer => userBeer.BeerSelection.BeerId > 0)
+            .map((userBeer) => (
             <tr key={userBeer.BeerSelection.BeerId}>
                 <td>
                     <img src= {userBeer.BeerSelection.Label} style={styles.img}/>
