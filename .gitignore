@@ -2,3 +2,4 @@ node_modules
 build
 .chrome
 .vscode
+.DS_store
