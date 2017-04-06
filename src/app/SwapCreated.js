@@ -4,6 +4,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 import RaisedButton from 'material-ui/RaisedButton';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
         textAlign: 'center',
@@ -55,7 +57,7 @@ class SwapCreated extends Component {
         this.setState({reminderSent: true});
         let me = this;
         let swapId = this.state.swapId;
-        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Remind/V1/' + swapId;
+        let url = AppConfig.ApiBaseUrl + 'Beer/Swap/Remind/V1/' + swapId;
         fetch(url, {
             headers: new Headers({
                 'Content-Type': 'application/json'
@@ -80,7 +82,7 @@ class SwapCreated extends Component {
     handleFinalizeSwap = () => {
         let me = this;
         let swapId = this.state.swapId;
-        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/randomize/V1/' + swapId;
+        let url = AppConfig.ApiBaseUrl + 'Beer/Swap/attendees/randomize/V1/' + swapId;
         fetch(url, {
             headers: new Headers({
                 'Content-Type': 'application/json'

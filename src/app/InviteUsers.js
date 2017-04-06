@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
 
@@ -41,7 +43,7 @@ class InviteUsers extends Component {
 
     componentWillMount() {
         let me = this;
-        fetch('http://beerswap.enservio.lan/BeerWS/api/User/V1').then(function (response) {
+        fetch(AppConfig.ApiBaseUrl + 'User/V1').then(function (response) {
             return response.json();
         }).then(setUsers);
 
@@ -88,7 +90,7 @@ class InviteUsers extends Component {
         }
 
         let swapId = this.state.swapId;
-        let url = 'http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Invite/V1/' + swapId;
+        let url = AppConfig.ApiBaseUrl + 'Beer/Swap/Invite/V1/' + swapId;
         fetch(url, {
             headers: new Headers({
                 'Content-Type': 'application/json'

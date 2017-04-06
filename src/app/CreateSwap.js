@@ -5,6 +5,8 @@ import TimePicker from 'material-ui/TimePicker';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {muiTheme} from './ColorScheme';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
         textAlign: 'center',
@@ -40,7 +42,7 @@ class CreateSwap extends Component {
             alert('No swap Date!');
         }
 
-        fetch('http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/V1', {
+        fetch(AppConfig.ApiBaseUrl + 'Beer/Swap/V1', {
             headers: new Headers({
                 'Content-Type': 'application/json'
             }),

@@ -5,6 +5,8 @@ import List from 'material-ui/List';
 import ListItem from 'material-ui/List/ListItem';
 import Avatar from 'material-ui/Avatar';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
         textAlign: 'center',
@@ -40,7 +42,7 @@ class AllBeerList extends Component {
 
     componentWillMount() {
         // get the beers for this swap
-        let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/`,
+        let url = AppConfig.ApiBaseUrl + `Beer/Swap/List/V1/`,
             me = this;
 
         fetch(url, {

@@ -1,3 +1,5 @@
+var AppConfig = require('AppConfig');
+
 export function setSwapId(swapId) {
     return {
         type: 'SET_SWAP',
@@ -13,7 +15,7 @@ export function fetchSwap(swapId) {
 
         // In this case, we return a promise to wait for.
         // This is not required by thunk middleware, but it is convenient for us.
-        let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/V1/${swapId}`;
+        let url = AppConfig.ApiBaseUrl + `Beer/Swap/attendees/V1/${swapId}`;
 
         return fetch(url, {
                 headers: new Headers({
@@ -47,7 +49,7 @@ export function selectBeer(swapId, userId, beerId) {
 
         // In this case, we return a promise to wait for.
         // This is not required by thunk middleware, but it is convenient for us.
-        let url = `http://beerswap.enservio.lan/BeerWS/api/User/Swap/Selection/V1/${swapId}/${userId}/${beerId}`;
+        let url = AppConfig.ApiBaseUrl + `User/Swap/Selection/V1/${swapId}/${userId}/${beerId}`;
 
         return fetch(url, {
             headers: new Headers({

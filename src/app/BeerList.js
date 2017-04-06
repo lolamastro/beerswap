@@ -7,6 +7,8 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import {muiTheme} from './ColorScheme';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
         textAlign: 'center',
@@ -50,7 +52,7 @@ class BeerList extends Component {
         // get the beers for this swap
         let swapId = this.state.swapId,
             // url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/${swapId}`,
-            url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/attendees/V1/${swapId}`,
+            url = AppConfig.ApiBaseUrl + `Beer/Swap/attendees/V1/${swapId}`,
             me = this;
 
         fetch(url, {

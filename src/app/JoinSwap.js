@@ -9,6 +9,8 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
+var AppConfig = require('AppConfig');
+
 const styles = {
     container: {
         textAlign: 'center',
@@ -44,7 +46,7 @@ class JoinSwap extends Component {
         // Associate this user with this beer swap
         let swapId = this.state.swapId,
             userId = this.state.userId,
-            joinUrl = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/Join/V1/${swapId}/${userId}`,
+            joinUrl = AppConfig.ApiBaseUrl + `Beer/Swap/Join/V1/${swapId}/${userId}`,
             me = this;
 
         fetch(joinUrl, {
@@ -63,10 +65,10 @@ class JoinSwap extends Component {
     }
 
     handleBeerInput(txtValue, datasource) {
-        if (txtValue.indexOf(' ') > -1) {
+        if (txtValue.lastIndexOf(' ') == txtValue.length - 1) {
             let words = txtValue.split(' ');
-            if (words.length !== 0 && this.state.searchTerm !== words[0]) {
-                let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/search/V1/${words[0]}`;
+            if (words.length !== 0 && this.state.searchTerm !== words) {
+                let url = AppConfig.ApiBaseUrl + `Beer/search/V1/${words}`;
                 let me = this;
                 this.setState({
                     searchTerm: words[0]
@@ -103,7 +105,7 @@ class JoinSwap extends Component {
             swapId = this.state.swapId,
             beerId = this.state.beerId;
 
-        let url = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/User/Beer/V1/${swapId}/${userId}/${beerId}`;
+        let url = AppConfig.ApiBaseUrl + `Beer/Swap/User/Beer/V1/${swapId}/${userId}/${beerId}`;
         fetch(url, {
             headers: new Headers({
                 'Content-Type': 'application/json'
@@ -192,7 +194,7 @@ class BeerGridList extends Component {
         // Get the beers associated with this beer swap
         let me = this,
             swapId = this.state.swapId,
-            getBeersUrl = `http://beerswap.enservio.lan/BeerWS/api/Beer/Swap/List/V1/${swapId}`;
+            getBeersUrl = AppConfig.ApiBaseUrl + `Beer/Swap/List/V1/${swapId}`;
         fetch(getBeersUrl, {
             headers: new Headers({
                 'Content-Type': 'application/json'

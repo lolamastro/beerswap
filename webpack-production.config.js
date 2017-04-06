@@ -43,6 +43,9 @@ const config = {
       },
     ],
   },
+  externals: {
+    'AppConfig': JSON.stringify(require('./config.json'))
+  }
 };
 
 module.exports = config;
